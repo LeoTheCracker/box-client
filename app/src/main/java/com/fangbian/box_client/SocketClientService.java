@@ -45,12 +45,12 @@ public class SocketClientService extends Service {
 
         Log.d(TAG, "Service Starting...");
         try {
-            socket = IO.socket("http://192.168.2.101:8000");
+            socket = IO.socket("http://192.168.2.101:8000/terminal");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     Log.d(TAG, "CONNECTED");
-                    socket.emit("data", "hi server");
+//                    socket.emit("data", "hi server");
                 }
             }).on("d_checkcode", new Emitter.Listener() {
                 @Override
