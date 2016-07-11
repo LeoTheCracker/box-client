@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.DataOutputStream;
-import java.net.URISyntaxException;
+import com.MobileTicket.CheckCodeUtil;
 
-import io.socket.client.Ack;
+import java.io.DataOutputStream;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-
-import static io.socket.client.IO.*;
 
 public class SocketClientService extends Service {
     private static String TAG = "SocketClientService";
@@ -30,6 +28,8 @@ public class SocketClientService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "Service Destroing...");
+        socket.disconnect();
+        socket = null;
         super.onDestroy();
     }
 
@@ -45,21 +45,25 @@ public class SocketClientService extends Service {
 
         Log.d(TAG, "Service Starting...");
         try {
-            IO.Options opts = new IO.Options();
-            opts.forceNew = true;
-            opts.reconnection = false;
-            socket = IO.socket("http://localhost",opts);
+            socket = IO.socket("http://192.168.2.101:8000");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     Log.d(TAG, "CONNECTED");
                     socket.emit("data", "hi server");
-//                    socket.disconnect();
                 }
             }).on("d_checkcode", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    String checkCode = "";
+                    try {
+                        checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[0]));
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
 
+                    socket.emit("d_checkcode",checkCode);
                 }
 
             }).on("e_checkcode", new Emitter.Listener() {
@@ -67,6 +71,15 @@ public class SocketClientService extends Service {
                 public void call(Object... args) {
 //                    Ack ack = (Ack) args[args.length - 1];
 //                    ack.call();
+                    String checkCode = "";
+                    try {
+                        checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[0]));
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+
+                    socket.emit("e_checkcode",checkCode);
                 }
 
             }).on("control", new Emitter.Listener() {
@@ -79,6 +92,16 @@ public class SocketClientService extends Service {
                 @Override
                 public void call(Object... args) {
                     Log.d(TAG, "DISCONNECT");
+                }
+            }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.d(TAG, "EVENT_CONNECT_ERROR:" + args[0].toString());
+                }
+            }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.d(TAG,"EVENT_ERROR:" + args[0].toString());
                 }
             });
 
