@@ -8,10 +8,16 @@ import android.util.Log;
 import com.MobileTicket.CheckCodeUtil;
 
 import java.io.DataOutputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
+import io.socket.client.Ack;
 import io.socket.client.IO;
+import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import io.socket.engineio.client.Transport;
 
 public class SocketClientService extends Service {
     private static String TAG = "SocketClientService";
@@ -27,9 +33,9 @@ public class SocketClientService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "Service Destroing...");
-        socket.disconnect();
-        socket = null;
+//        Log.d(TAG, "Service Destroing...");
+//        socket.disconnect();
+//        socket = null;
         super.onDestroy();
     }
 
@@ -41,11 +47,19 @@ public class SocketClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //upgradeRootPermission(getPackageCodePath());
+        upgradeRootPermission(getPackageCodePath());
+
+        if (socket != null) {
+            Log.d(TAG, "Service is running...");
+            return super.onStartCommand(intent, flags, startId);
+        }
 
         Log.d(TAG, "Service Starting...");
         try {
-            socket = IO.socket("http://192.168.2.101:8000/terminal");
+            IO.Options opt = new IO.Options();
+            opt.timestampParam="date="+String.valueOf(System.currentTimeMillis());
+            opt.timestampRequests=true;
+            socket = IO.socket("http://192.168.1.13:8000/terminal",opt);
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -55,31 +69,28 @@ public class SocketClientService extends Service {
             }).on("d_checkcode", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+
                     String checkCode = "";
                     try {
                         checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[0]));
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
 
-                    socket.emit("d_checkcode",checkCode);
+                    socket.emit("d_checkcode", checkCode);
                 }
 
             }).on("e_checkcode", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-//                    Ack ack = (Ack) args[args.length - 1];
-//                    ack.call();
                     String checkCode = "";
                     try {
                         checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[0]));
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
 
-                    socket.emit("e_checkcode",checkCode);
+                    socket.emit("e_checkcode", checkCode);
                 }
 
             }).on("control", new Emitter.Listener() {
@@ -101,11 +112,39 @@ public class SocketClientService extends Service {
             }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG,"EVENT_ERROR:" + args[0].toString());
+                    Log.d(TAG, "EVENT_ERROR:" + args[0].toString());
                 }
             });
 
             socket.connect();
+
+//            socket.io().on(Manager.EVENT_TRANSPORT, new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    Transport transport = (Transport) args[0];
+//
+//                    transport.on(Transport.EVENT_REQUEST_HEADERS, new Emitter.Listener() {
+//                        @Override
+//                        public void call(Object... args) {
+//                            @SuppressWarnings("unchecked")
+//                            Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
+//                            headers.put("Date", Arrays.asList(String.valueOf(System.currentTimeMillis())));
+//                        }
+//                    });
+//
+////                    transport.on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
+////                        @Override
+////                        public void call(Object... args) {
+////                            @SuppressWarnings("unchecked")
+//////                            Map<String, List<String>> headers = (Map<String, List<String>>)args[0];
+////                                    // access response headers
+//////                            String cookie = headers.get("Set-Cookie").get(0);
+////                                    Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
+////                            headers.put("Cookie", Arrays.asList(String.valueOf(System.currentTimeMillis())));
+////                        }
+////                    });
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

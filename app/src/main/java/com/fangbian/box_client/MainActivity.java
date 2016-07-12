@@ -10,6 +10,9 @@ import android.view.MenuItem;
 
 import com.MobileTicket.CheckCodeUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Intent service = new Intent(this, SocketClientService.class);
-        stopService(service);
+//        Intent service = new Intent(this, SocketClientService.class);
+//        stopService(service);
         super.onDestroy();
     }
 
