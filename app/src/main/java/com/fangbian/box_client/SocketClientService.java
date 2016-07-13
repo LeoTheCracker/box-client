@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.MobileTicket.CheckCodeUtil;
 
+import org.json.JSONException;
+
 import java.io.DataOutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -75,9 +77,18 @@ public class SocketClientService extends Service {
                         checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[0]));
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        try {
+                            socket.emit("checkcode", new ResultMessage<String>(checkCode, ex.getMessage(), System.currentTimeMillis()).getJsonObject());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-
-                    socket.emit("d_checkcode", checkCode);
+                    //socket.emit("d_checkcode",checkCode);
+                    try {
+                        socket.emit("checkcode", new ResultMessage<String>(checkCode,"",System.currentTimeMillis()).getJsonObject());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }).on("e_checkcode", new Emitter.Listener() {
@@ -88,9 +99,19 @@ public class SocketClientService extends Service {
                         checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[0]));
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        try {
+                            socket.emit("checkcode", new ResultMessage<String>(checkCode, ex.getMessage(), System.currentTimeMillis()).getJsonObject());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
-                    socket.emit("e_checkcode", checkCode);
+                    //socket.emit("e_checkcode",checkCode);
+                    try {
+                        socket.emit("checkcode", new ResultMessage<String>(checkCode,"",System.currentTimeMillis()).getJsonObject());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }).on("control", new Emitter.Listener() {
