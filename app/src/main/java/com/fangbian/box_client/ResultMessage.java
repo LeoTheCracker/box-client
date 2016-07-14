@@ -10,11 +10,13 @@ public class ResultMessage<T> {
     private T data;
     private String error;
     private long timespan;
+    private String ip;
 
-    public ResultMessage(T data, String error, long timespan) {
+    public ResultMessage(T data, String error, long timespan,String ip) {
         this.data = data;
         this.error = error;
         this.timespan = timespan;
+        this.ip=ip;
     }
 
     public T getData() {
@@ -41,11 +43,20 @@ public class ResultMessage<T> {
         this.timespan = timespan;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public JSONObject getJsonObject() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("error",error);
         jsonObject.put("data",data);
         jsonObject.put("timespan",timespan);
+        jsonObject.put("ip",ip);
 
         return jsonObject;
     }

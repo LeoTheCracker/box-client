@@ -10,7 +10,11 @@ import com.MobileTicket.CheckCodeUtil;
 import org.json.JSONException;
 
 import java.io.DataOutputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -58,10 +62,7 @@ public class SocketClientService extends Service {
 
         Log.d(TAG, "Service Starting...");
         try {
-            IO.Options opt = new IO.Options();
-            opt.timestampParam="date="+String.valueOf(System.currentTimeMillis());
-            opt.timestampRequests=true;
-            socket = IO.socket("http://192.168.1.13:8000/terminal",opt);
+            socket = IO.socket("http://192.168.1.13:8000/terminal");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -73,19 +74,15 @@ public class SocketClientService extends Service {
                 public void call(Object... args) {
 
                     String checkCode = "";
+                    String error="";
                     try {
                         checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[0]));
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        try {
-                            socket.emit("checkcode", new ResultMessage<String>(checkCode, ex.getMessage(), System.currentTimeMillis()).getJsonObject());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        error = ex.getMessage();
                     }
                     //socket.emit("d_checkcode",checkCode);
                     try {
-                        socket.emit("checkcode", new ResultMessage<String>(checkCode,"",System.currentTimeMillis()).getJsonObject());
+                        socket.emit("checkcode", new ResultMessage<String>(checkCode,error,System.currentTimeMillis(),getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -95,20 +92,16 @@ public class SocketClientService extends Service {
                 @Override
                 public void call(Object... args) {
                     String checkCode = "";
+                    String error="";
                     try {
                         checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[0]));
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        try {
-                            socket.emit("checkcode", new ResultMessage<String>(checkCode, ex.getMessage(), System.currentTimeMillis()).getJsonObject());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        error = ex.getMessage();
                     }
 
                     //socket.emit("e_checkcode",checkCode);
                     try {
-                        socket.emit("checkcode", new ResultMessage<String>(checkCode,"",System.currentTimeMillis()).getJsonObject());
+                        socket.emit("checkcode", new ResultMessage<String>(checkCode,error,System.currentTimeMillis(),getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -139,38 +132,35 @@ public class SocketClientService extends Service {
 
             socket.connect();
 
-//            socket.io().on(Manager.EVENT_TRANSPORT, new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    Transport transport = (Transport) args[0];
-//
-//                    transport.on(Transport.EVENT_REQUEST_HEADERS, new Emitter.Listener() {
-//                        @Override
-//                        public void call(Object... args) {
-//                            @SuppressWarnings("unchecked")
-//                            Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
-//                            headers.put("Date", Arrays.asList(String.valueOf(System.currentTimeMillis())));
-//                        }
-//                    });
-//
-////                    transport.on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
-////                        @Override
-////                        public void call(Object... args) {
-////                            @SuppressWarnings("unchecked")
-//////                            Map<String, List<String>> headers = (Map<String, List<String>>)args[0];
-////                                    // access response headers
-//////                            String cookie = headers.get("Set-Cookie").get(0);
-////                                    Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
-////                            headers.put("Cookie", Arrays.asList(String.valueOf(System.currentTimeMillis())));
-////                        }
-////                    });
-//                }
-//            });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    public String getLocalIpAddress()
+    {
+        try
+        {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
+            {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
+                {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress())
+                    {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.getMessage() == null ?"get local ip address faild":ex.getMessage());
+        }
+        return "";
     }
 
     public boolean upgradeRootPermission(String pkgCodePath) {
