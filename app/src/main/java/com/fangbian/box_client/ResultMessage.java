@@ -11,8 +11,10 @@ public class ResultMessage<T> {
     private String error;
     private long timespan;
     private String ip;
+    private String id;
 
-    public ResultMessage(T data, String error, long timespan,String ip) {
+    public ResultMessage(String id,T data, String error, long timespan,String ip) {
+        this.id =id;
         this.data = data;
         this.error = error;
         this.timespan = timespan;
@@ -51,8 +53,17 @@ public class ResultMessage<T> {
         this.ip = ip;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public JSONObject getJsonObject() throws JSONException {
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",id);
         jsonObject.put("error",error);
         jsonObject.put("data",data);
         jsonObject.put("timespan",timespan);

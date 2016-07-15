@@ -1,6 +1,7 @@
 package com.fangbian.box_client;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -53,12 +54,20 @@ public class SocketClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        upgradeRootPermission(getPackageCodePath());
+        //upgradeRootPermission(getPackageCodePath());
 
         if (socket != null) {
             Log.d(TAG, "Service is running...");
             return super.onStartCommand(intent, flags, startId);
         }
+
+//        Intent _intent = new Intent("com.fangbian.zt.SERVICE");
+//        boolean result = bindService(_intent, setDeviceInfoByPhone_Connection, Context.BIND_AUTO_CREATE);
+//        if (!result) {
+//            message = "Service Connect failed!";
+//            logger.error(message);
+//            invokeCallback(true, message);
+//        }
 
         Log.d(TAG, "Service Starting...");
         try {
@@ -76,13 +85,15 @@ public class SocketClientService extends Service {
                     String checkCode = "";
                     String error="";
                     try {
-                        checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[0]));
+                        checkCode = CheckCodeUtil.decheckcode("", String.valueOf(args[1]));
                     } catch (Exception ex) {
                         error = ex.getMessage();
                     }
                     //socket.emit("d_checkcode",checkCode);
                     try {
-                        socket.emit("checkcode", new ResultMessage<String>(checkCode,error,System.currentTimeMillis(),getLocalIpAddress()).getJsonObject());
+                        socket.emit("checkcode",
+                                new ResultMessage<String>(String.valueOf(args[0]), checkCode, error,
+                                        System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -94,14 +105,16 @@ public class SocketClientService extends Service {
                     String checkCode = "";
                     String error="";
                     try {
-                        checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[0]));
+                        checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[1]));
                     } catch (Exception ex) {
                         error = ex.getMessage();
                     }
 
                     //socket.emit("e_checkcode",checkCode);
                     try {
-                        socket.emit("checkcode", new ResultMessage<String>(checkCode,error,System.currentTimeMillis(),getLocalIpAddress()).getJsonObject());
+                        socket.emit("checkcode",
+                                new ResultMessage<String>(String.valueOf(args[0]),checkCode,error,
+                                        System.currentTimeMillis(),getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -25,17 +25,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent service = new Intent(this, SocketClientService.class);
-        startService(service);
+//        Intent service = new Intent(this, SocketClientService.class);
+//        startService(service);
 
-//        String strDecheckcode = CheckCodeUtil.decheckcode("", "FTsLYXakruIXda+QIcxlUkxJFXo7AB15cTelnpjcWi1dRYriOhxhnSkIZzLndzA9Rk+bLvkxwxDKkz8YyOjYRKf4vVsQuqYKVqR2jEQcMd3WNpPK9nG8cFmEchTsVyaFawkk99taDN0YdAoXQebqYFzmIWP0gVtwkGcpCjKdL3X39T6D/WqdTJp7nDFRocS9cE+Ku9rB2y2pHNIaFaNvf+YWF7ukKklSpLdpEX9CNYM8P0JofERpB2nb/atyCiINg/j0PUi/XThlsmiD/68CCYCuA6709JHaltEerFeMU2dSQNiDv6q7Z34g5jGzMcRb3ITRVNk+55ZgAezhZN16hpOpCA6Kdgo1evBpzW80XGaS2hkK7kMbPDrd+z5dIpKCHB/cRqdzxYrVdx5wvHeQJaQcYSnBr7xMEiekqErZGEWFJVd+NfzpmbiC8c1pF3tkHynmr4ow+X5XKo1hJgE9/atAvBnImvNhajtnCj3BhqbM=");
+//        String strDecheckcode = CheckCodeUtil.decheckcode("", "FTsLYXakruIXda+QIcxlUkxJFXo7AB15cTelnpjcWi1dRYriOhxhnSkIZzLndzA9Rk+bLvkxwxDKkz8YyOjYRKf4vVsQuqYKVqR2jEQcMd3WNpPK9nG8cFmEchTsVyaFawkk99taDN0YdAoXQebqYFzmIWP0gVtwkGcpCjKdL3X39T6D/WqdTJp7nDFRocS9cE+Ku9rB2y2pHNIaFaNvf+YWF7ukKklSpLdpEX9CNYM8P0JofERpB2nb/atyCiINg/j0PUi/XThlsmiD/68CCYCuA6709JHaltEerFeMU2dSQNiDv6q7Z34g5jGzMcRb3ITRVNk+55ZgAezhZN16hpO1zCfKg4fpGNE3NtC9Re9G6MHDD787B7q97vdKYJcaVUOPp0vgET86WvPLDVqwZWP5YJiI0ZX97o2wsisUEO4/PKLiFwXizA/A4VOy+35YirwvSfZ204TZcP9r9XJowzWRxPzJsFiH0/5VG4gGsKKYuDRXuFjKBPjwxYjsIbO97");
 //        Log.v("INJECT", "decheckcode1:" + strDecheckcode);
 //        String strCheckCode = CheckCodeUtil.checkcode("", "[{\"baseDTO.os_type\":\"a\",\"baseDTO.device_no\":\"e20d58861dadb144\",\"baseDTO.mobile_no\":\"123444\",\"baseDTO.time_str\":\"20160713100652\",\"baseDTO.version_no\":\"1.1\",\"baseDTO.user_name\":\"15084821221\",\"password\":\"5416d7cd6ef195a0f7622a9c56b55e84\"}]");
-////                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
+//                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
+
 //
-////
-////                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
-////                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
+//                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
+//                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
 //        Log.v("INJECT", "checkcode:" + strCheckCode);
     }
 
