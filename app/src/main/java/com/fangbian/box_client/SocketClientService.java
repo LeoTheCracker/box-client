@@ -71,7 +71,7 @@ public class SocketClientService extends Service {
 
         Log.d(TAG, "Service Starting...");
         try {
-            socket = IO.socket("http://192.168.1.13:8000/terminal");
+            socket = IO.socket("http://120.26.213.143:8000/terminal");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
