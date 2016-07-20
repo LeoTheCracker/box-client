@@ -2,7 +2,9 @@ package com.fangbian.box_client;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,12 @@ import android.view.MenuItem;
 import com.MobileTicket.CheckCodeUtil;
 import com.worklight.common.security.AppAuthenticityToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,12 +35,31 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        Intent service = new Intent(this, SocketClientService.class);
-//        startService(service);
+        Intent service = new Intent(this, SocketClientService.class);
+        startService(service);
 
+//        ZtContext tokenContext = new ZtContext();
+//        ZtPackageInfo localSuanyaPackageInfo = new ZtPackageInfo();
+//        Signature[] arrayOfSignature = new Signature[1];
+//        arrayOfSignature[0] = new Signature("30820237308201a0a0030201020204520c9714300d06092a864886f70d0101050500305f310b30090603550406130230313110300e060355040813076265696a696e673110300e060355040713076265696a696e67310c300a060355040a13037a7463310e300c060355040b13057261696c73310e300c0603550403130531323330363020170d3133303831353038353334305a180f32313133303732323038353334305a305f310b30090603550406130230313110300e060355040813076265696a696e673110300e060355040713076265696a696e67310c300a060355040a13037a7463310e300c060355040b13057261696c73310e300c06035504031305313233303630819f300d06092a864886f70d010101050003818d00308189028181009fea9d56277fc27c68a3836173d286791af2be38e7384afce32f38b164d83a6c6ec7656f7881c444c2e677e2195415a92bb6a06638886d132d26ce47895fa96076085813ee7b264d6017b21a64c75ae4ba63496906fe77fda68305d8ee426ece06e1b683bf78eccedf8bcd9817376d26c50ffb745f378a50834fd6522db3a6150203010001300d06092a864886f70d0101050500038181003e646d1dea5763f12008d36023a0812bc4452b15d3f8cbf189e2f6b43b89a373e4cc4ec7197f31e9c765821d6c8499cd0a71e49fac114b0b90bf2db8f7520d5ab922c04b602f7e81cd7f4dcb9e94118691bf2dd6277bc404bdfc6906fab2145c3426a0624a549cd85e83fe4822e686abc4119f21dbddb8cb71c5ebdb5f042688");
+//        localSuanyaPackageInfo.setSignatures(arrayOfSignature);
+//        ZtPackageManager localSuanyaPackageManager = new ZtPackageManager();
+//        localSuanyaPackageManager.setPackageInfo(localSuanyaPackageInfo);
+//        tokenContext.setPackageManager(localSuanyaPackageManager);
+//        tokenContext.setPackageName("com.MobileTicket");
+//        String str = AppAuthenticityToken.a1(tokenContext, "273524C193809N563130X8A56324FS683373X254F09D8S412578XAA4FF4DBS864272C873638XBAE5B5DFS093096C174687N704272N313431C890733N133879X70669515S");
+//        Log.d("test",str);
 
-        Log.d("test", AppAuthenticityToken.a1(this,
-                "273524C193809N563130X8A56324FS683373X254F09D8S412578XAA4FF4DBS864272C873638XBAE5B5DFS093096C174687N704272N313431C890733N133879X70669515S"));
+//        try {
+//            PackageInfo packageInfo = getPackageManager().getPackageInfo("com.MobileTicket", PackageManager.GET_SIGNATURES);
+//            Signature[] signatures = packageInfo.signatures;
+//            for (Signature signature : signatures) {
+//                Log.d("test",signature.toCharsString());
+//            }
+//
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 //        String strDecheckcode = CheckCodeUtil.decheckcode("", "aUR5zckh0agBxJ3JmSEUrA0QtPm9wWHcteXMOb2kGdShdFgNCUVJvAlEmL1lbTTw0EzwyMzxDJgIyIjphSEQkNjcwIlY6QUE0OzA3QDlpJDg3FiJAHTYFQiI7QCw4ZjIaHxZBRQEwRG8EBFNCWl1dYHFRXURNRHNYeHleQnxMAVhNW1N8YQNdUlNXXm98HgQCfVsHUX8CeFRtfVJXDHlBX2RnXXEWW1cMR197cAt6BHZVQwJxDVdQcUEDXEVDQRp5TWpRbncHAVhPYRkBXXMJBl5cdXJtDGtme1J5W39keHF2YXd0bVxSXg==");
 //        Log.v("INJECT", "decheckcode1:" + strDecheckcode);

@@ -1,8 +1,7 @@
 package com.worklight.common.security;
 
 
-import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 
 /**
  * Created by zt on 16/7/18.
@@ -12,5 +11,5 @@ public class AppAuthenticityToken {
         System.loadLibrary("authjni");
     }
 
-    public static native String a1(AppCompatActivity arg1,String arg2);
+    public static native String a1(Context arg1,String parmString);
 }
