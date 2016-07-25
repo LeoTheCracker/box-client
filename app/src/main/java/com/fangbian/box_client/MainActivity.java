@@ -61,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-//        String strDecheckcode = CheckCodeUtil.decheckcode("", "aUR5zckh0agBxJ3JmSEUrA0QtPm9wWHcteXMOb2kGdShdFgNCUVJvAlEmL1lbTTw0EzwyMzxDJgIyIjphSEQkNjcwIlY6QUE0OzA3QDlpJDg3FiJAHTYFQiI7QCw4ZjIaHxZBRQEwRG8EBFNCWl1dYHFRXURNRHNYeHleQnxMAVhNW1N8YQNdUlNXXm98HgQCfVsHUX8CeFRtfVJXDHlBX2RnXXEWW1cMR197cAt6BHZVQwJxDVdQcUEDXEVDQRp5TWpRbncHAVhPYRkBXXMJBl5cdXJtDGtme1J5W39keHF2YXd0bVxSXg==");
-//        Log.v("INJECT", "decheckcode1:" + strDecheckcode);
-//        String strCheckCode = CheckCodeUtil.checkcode("", "[{\"baseDTO.os_type\":\"a\",\"baseDTO.device_no\":\"e20d58861dadb144\",\"baseDTO.mobile_no\":\"123444\",\"baseDTO.time_str\":\"20160713100652\",\"baseDTO.version_no\":\"1.1\",\"baseDTO.user_name\":\"15084821221\",\"password\":\"5416d7cd6ef195a0f7622a9c56b55e84\"}]");
-////                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
-////
-////
-////                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
-////                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
-//        Log.v("INJECT", "checkcode:" + strCheckCode);
+        String strDecheckcode = CheckCodeUtil.decheckcode("", "FTsLYXakruIXda+QIcxlUkxJFXo7AB15cTelnpjcWi1dRYriOhxhnSkIZzLndzA9Rk+bLvkxwxDKkz8YyOjYRKf4vVsQuqYKVqR2jEQcMd3WNpPK9nG8cFmEchTsVyaFawkk99taDN0YdAoXQebqYFzmIWP0gVtwkGcpCjKdL3X39T6D/WqdTJp7nDFRocS9cE+Ku9rB2y2pHNIaFaNvf+SzRm8ItIhwTBTC0QtXPvoIualY7hNXBTqcDURsza3tt+O/FlShmwkwWdVj2/ZGxT+pjhjB8teM9VUCBtT1XJgcdHik2MOyKid3J7fxvwF14lrMpahbkC1lmOzFM0d3vGqxeKHZ80m32wPx0XIBp8ZsoAw3YwOUY2byjbjXqa5yvAJMhEvBBGALiItn32AE74BFXcrowyiRHicKrujmw0U4L8IGxApicFQCX/zsnxo5Ps0Guz+/EL30wn1xlHcNzyb/4sDwlzYd24Olkt331qxiRUcZ2cWRrKaTRqyhq2ReE");
+        Log.v("INJECT", "decheckcode1:" + strDecheckcode);
+        String strCheckCode = CheckCodeUtil.checkcode("", "[{\"baseDTO.os_type\":\"a\",\"baseDTO.device_no\":\"e20d58861dadb144\",\"baseDTO.mobile_no\":\"123444\",\"baseDTO.time_str\":\"20160713100652\",\"baseDTO.version_no\":\"1.1\",\"baseDTO.username\":\"15084821221\",\"password\":\"5416d7cd6ef195a0f7622a9c56b55e84\"}]");
+//                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
+//
+//
+//                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
+//                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
+        Log.v("INJECT", "checkcode:" + strCheckCode);
     }
 
     @Override
