@@ -13,13 +13,19 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.MobileTicket.CheckCodeUtil;
 import com.worklight.common.security.AppAuthenticityToken;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,8 +41,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //动态添加标识
+//        Marker marker = Markers.append("appname", "192.168.1.13");
+//        logger.info(marker, "log message");
+
         Intent service = new Intent(this, SocketClientService.class);
         startService(service);
+
+//        Button button = (Button) findViewById(R.id.button);
+//        button.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                throw new RuntimeException("test");
+//            }
+//        });
 
 //        ZtContext tokenContext = new ZtContext();
 //        ZtPackageInfo localSuanyaPackageInfo = new ZtPackageInfo();
@@ -47,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 //        localSuanyaPackageManager.setPackageInfo(localSuanyaPackageInfo);
 //        tokenContext.setPackageManager(localSuanyaPackageManager);
 //        tokenContext.setPackageName("com.MobileTicket");
-//        String str = AppAuthenticityToken.a1(tokenContext, "273524C193809N563130X8A56324FS683373X254F09D8S412578XAA4FF4DBS864272C873638XBAE5B5DFS093096C174687N704272N313431C890733N133879X70669515S");
+//        String str = AppAuthenticityToken.a1(tokenContext, "601190N304257N287239N070296XF5BD5790S796147X7BFD658FS352334X5EBA0F34S354498N264557X3750369AS723424N467991XDB50779DS620863C864112C113403C056584XC8832491S");
 //        Log.d("test",str);
 
 //        try {
@@ -61,15 +79,20 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        String strDecheckcode = CheckCodeUtil.decheckcode("", "FTsLYXakruIXda+QIcxlUkxJFXo7AB15cTelnpjcWi1dRYriOhxhnSkIZzLndzA9Rk+bLvkxwxDKkz8YyOjYRKf4vVsQuqYKVqR2jEQcMd3WNpPK9nG8cFmEchTsVyaFawkk99taDN0YdAoXQebqYFzmIWP0gVtwkGcpCjKdL3X39T6D/WqdTJp7nDFRocS9cE+Ku9rB2y2pHNIaFaNvf+SzRm8ItIhwTBTC0QtXPvoIualY7hNXBTqcDURsza3tt+O/FlShmwkwWdVj2/ZGxT+pjhjB8teM9VUCBtT1XJgcdHik2MOyKid3J7fxvwF14lrMpahbkC1lmOzFM0d3vGqxeKHZ80m32wPx0XIBp8ZsoAw3YwOUY2byjbjXqa5yvAJMhEvBBGALiItn32AE74BFXcrowyiRHicKrujmw0U4L8IGxApicFQCX/zsnxo5Ps0Guz+/EL30wn1xlHcNzyb/4sDwlzYd24Olkt331qxiRUcZ2cWRrKaTRqyhq2ReE");
-        Log.v("INJECT", "decheckcode1:" + strDecheckcode);
-        String strCheckCode = CheckCodeUtil.checkcode("", "[{\"baseDTO.os_type\":\"a\",\"baseDTO.device_no\":\"e20d58861dadb144\",\"baseDTO.mobile_no\":\"123444\",\"baseDTO.time_str\":\"20160713100652\",\"baseDTO.version_no\":\"1.1\",\"baseDTO.username\":\"15084821221\",\"password\":\"5416d7cd6ef195a0f7622a9c56b55e84\"}]");
-//                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
-//
-//
-//                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
-//                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
-        Log.v("INJECT", "checkcode:" + strCheckCode);
+//        TelephonyManager tm = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+//        Log.d("imei",tm.getDeviceId());
+
+//        String strDecheckcode = CheckCodeUtil.decheckcode("", "FTsLYXakruIXda+QIcxlUkxJFXo7AB15cTelnpjcWi1dRYriOhxhnSkIZzLndzA9Rk+bLvkxwxDKkz8YyOjYRKf4vVsQuqYKVqR2jEQcMd3WNpPK9nG8cFmEchTsVyaFawkk99taDN0YdAoXQebqYFzmIWP0gVtwkGcpCjKdL3X39T6D/WqdTJp7nDFRocS9cE+Ku9rB2y2pHNIaFaNvf+SzRm8ItIhwTBTC0QtXPvoIualY7hNXBTqcDURsza3tt+O/FlShmwkwWdVj2/ZGxT+pjhjB8teM9VUCBtT1XJgcdHik2MOyKid3J7fxvwF14lrMpahbkC1lmOzFM0d3vGqxeKHZ80m32wPx0XIBp8ZsoAw3YwOUY2byjbjXqa5yvAJMhEvBBGALiItn32AE74BFXcrowyiRHicKrujmw0U4L8IGxApicFQCX/zsnxo5Ps0Guz+/EL30wn1xlHcNzyb/4sDwlzYd24Olkt331qxiRUcZ2cWRrKaTRqyhq2ReE");
+//        Log.v("INJECT", "decheckcode1:" + strDecheckcode);
+//        String strCheckCode = CheckCodeUtil.checkcode("", "[{\"baseDTO.os_type\":\"a\",\"baseDTO.device_no\":\"e20d58861dadb144\",\"baseDTO.mobile_no\":\"123444\",\"baseDTO.time_str\":\"20160713100652\",\"baseDTO.version_no\":\"1.1\",\"baseDTO.username\":\"15084821221\",\"password\":\"5416d7cd6ef195a0f7622a9c56b55e84\"}]");
+////                String strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7cgUpebb6G0ayHUSD9nCJ5KKVHdA9ek3gU1jUxDsQEQjggZSKHfhofFgbfAomEt7ktZx/bQbtrrXrHeklmh50YdlB5MeVE1Rw5zPZ0x2JcmPUX+u4nzprXfmfdcz6939wHVpA3vnSxUpq73YEQOURp+riUjPMZnGaeSN3+3YGQzBmtbcqLUCGtME2wTsK1BpaI=");
+////
+////
+////                strDecheckcode = CheckCodeUtil.decheckcode("","FtlLDmxh51UjCaBx4agFPeVKi075LgNRddeVRHCzvw7e4RlyieGrtVpJXHjm2Jfw61vcpkeo+3SgEsvLAxDIobloT7ECps909wMLYWJvdgUlhCXq3VMoqND51iv5UejwZ3PZswTTtPg/MhP3i0B39VqIsbVmK270fNWVOG3HOpF4l38oLnL+bYTYhRdqSkEFGNG7wJKUwvb3yPZUg4KDPmKMen9/JURDQqI97UEiZeKw=");
+////                Log.v("INJECT", "decheckcode2:"+strDecheckcode);
+//        Log.v("INJECT", "checkcode:" + strCheckCode);
+
+
     }
 
     @Override

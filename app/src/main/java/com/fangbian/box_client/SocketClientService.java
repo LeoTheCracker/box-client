@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.Signature;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.MobileTicket.CheckCodeUtil;
 import com.worklight.common.security.AppAuthenticityToken;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.net.InetAddress;
@@ -31,6 +32,7 @@ import io.socket.engineio.client.Transport;
 public class SocketClientService extends Service {
     private static String TAG = "SocketClientService";
     private static Socket socket = null;
+    private final static Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
     public SocketClientService() {
     }
@@ -50,7 +52,7 @@ public class SocketClientService extends Service {
 
     @Override
     public boolean stopService(Intent name) {
-        Log.d(TAG, "Service Stopping...");
+        logger.info("Service Stopping...");
         return super.stopService(name);
     }
 
@@ -58,8 +60,9 @@ public class SocketClientService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //upgradeRootPermission(getPackageCodePath());
 
+
         if (socket != null) {
-            Log.d(TAG, "Service is running...");
+            logger.info("Service is running...");
             return super.onStartCommand(intent, flags, startId);
         }
 
@@ -71,13 +74,13 @@ public class SocketClientService extends Service {
 //            invokeCallback(true, message);
 //        }
 
-        Log.d(TAG, "Service Starting...");
+        logger.info("Service Starting...");
         try {
             socket = IO.socket("http://120.26.213.143:8000/terminal");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG, "CONNECTED");
+                    logger.info("CONNECTED");
 //                    socket.emit("data", "hi server");
                 }
             }).on("d_checkcode", new Emitter.Listener() {
@@ -110,6 +113,7 @@ public class SocketClientService extends Service {
                         checkCode = CheckCodeUtil.checkcode("", String.valueOf(args[1]));
                     } catch (Exception ex) {
                         error = ex.getMessage();
+                        logger.error(error);
                     }
 
                     //socket.emit("e_checkcode",checkCode);
@@ -118,7 +122,7 @@ public class SocketClientService extends Service {
                                 new ResultMessage<String>(String.valueOf(args[0]), checkCode, error,
                                         System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage());
                     }
                 }
             }).on("realm", new Emitter.Listener() {
@@ -140,6 +144,7 @@ public class SocketClientService extends Service {
                     }
                     catch (Exception e){
                         error = e.getMessage();
+                        logger.error(error);
                     }
 
                     try {
@@ -147,36 +152,36 @@ public class SocketClientService extends Service {
                                 new ResultMessage(String.valueOf(args[0]), realm, error,
                                         System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage());
                     }
                 }
             }).on("control", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG, String.valueOf(args[0]));
+                    logger.info(String.valueOf(args[0]));
                 }
 
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG, "DISCONNECT");
+                    logger.warn("DISCONNECT");
                 }
             }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG, "EVENT_CONNECT_ERROR:" + args[0].toString());
+                    logger.error("EVENT_CONNECT_ERROR:" + args[0].toString());
                 }
             }).on(Socket.EVENT_ERROR, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.d(TAG, "EVENT_ERROR:" + args[0].toString());
+                    logger.error("EVENT_ERROR:" + args[0].toString());
                 }
             });
 
             socket.connect();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -194,7 +199,7 @@ public class SocketClientService extends Service {
                 }
             }
         } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage() == null ? "get local ip address faild" : ex.getMessage());
+            logger.error(ex.getMessage() == null ? "get local ip address faild" : ex.getMessage());
         }
         return "";
     }
@@ -211,7 +216,7 @@ public class SocketClientService extends Service {
             os.flush();
             process.waitFor();
         } catch (Exception e) {
-            Log.e(TAG, "请求root权限失败\n" + e.getMessage());
+            logger.error("请求root权限失败\n" + e.getMessage());
             return false;
         } finally {
             try {
@@ -220,7 +225,7 @@ public class SocketClientService extends Service {
                 }
                 process.destroy();
             } catch (Exception e) {
-                Log.e(TAG, "请求root权限失败\n" + e.getMessage());
+                logger.error("请求root权限失败\n" + e.getMessage());
             }
         }
         return true;
