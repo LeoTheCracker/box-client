@@ -29,18 +29,18 @@ import java.util.List;
  */
 public class ZtPackageManager extends PackageManager {
 
-    private ZtPackageInfo packageInfo;
+    private ZTPackageInfo packageInfo;
     @Override
     public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
         return packageInfo;
     }
 
-    public ZtPackageInfo getPackageInfo()
+    public ZTPackageInfo getPackageInfo()
     {
         return this.packageInfo;
     }
 
-    public void setPackageInfo(ZtPackageInfo paramSuanyaPackageInfo)
+    public void setPackageInfo(ZTPackageInfo paramSuanyaPackageInfo)
     {
         this.packageInfo = paramSuanyaPackageInfo;
     }
