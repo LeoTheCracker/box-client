@@ -12,8 +12,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent service = new Intent(context, SocketClientService.class);
-        context.startService(service);
-        Log.v("TAG", "Service started.");
+//        Intent service = new Intent(context, SocketClientService.class);
+//        context.startService(service);
+//        Log.v("TAG", "Service started.");
     }
 }

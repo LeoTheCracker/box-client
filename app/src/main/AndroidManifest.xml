@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fangbian.box_client" >
+    package="com.hguiy.dexplug" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,14 +27,8 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".SocketClientService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-
         <receiver
-            android:name=".BootBroadcastReceiver"
+            android:name="com.fangbian.box_client.BootBroadcastReceiver"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>

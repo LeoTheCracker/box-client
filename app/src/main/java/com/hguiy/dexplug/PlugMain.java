@@ -1,18 +1,23 @@
-package com.fangbian.box_client;
+package com.hguiy.dexplug;
 
-import android.app.Service;
-import android.content.Intent;
+/**
+ * Created by zt on 16/8/1.
+ */
+
+import android.app.Activity;
 import android.content.pm.Signature;
-import android.os.IBinder;
+import android.util.Log;
 
-import com.MobileTicket.CheckCodeUtil;
+import com.fangbian.box_client.ResultMessage;
+import com.fangbian.box_client.ZTContext;
+import com.fangbian.box_client.ZTPackageInfo;
+import com.fangbian.box_client.ZtPackageManager;
 import com.worklight.common.security.AppAuthenticityToken;
 
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.DataOutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -21,59 +26,60 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class SocketClientService extends Service {
-    private static String TAG = "SocketClientService";
+public class PlugMain {
+    private static final String TAG = "PlugMain";
+    public static String mSoPath = null;
+    private Activity mActivity;
     private static Socket socket = null;
-    private final static Logger logger = LoggerFactory.getLogger(MainActivity.class);
+    private final static Logger logger = LoggerFactory.getLogger(PlugMain.class);
+    private static String ip = getLocalIpAddress();
 
-    public SocketClientService() {
+    private final static String LOG_TAG = "INJECT_Unpack";
+
+    public PlugMain(Activity paramActivity) {
+        mActivity = paramActivity;
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    public static void init(int cookie, String packageName, String className) {
+        Log.e(LOG_TAG, "dex plug init load!");
+//        new CheckCodeUtil();
 
-    @Override
-    public void onDestroy() {
-//        Log.d(TAG, "Service Destroing...");
-//        socket.disconnect();
-//        socket = null;
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean stopService(Intent name) {
-        logger.info("Service Stopping...");
-        return super.stopService(name);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        //upgradeRootPermission(getPackageCodePath());
-
+//        new Thread(new Runnable() {
+//            public void run() {
+//                try{
+//                    Thread.sleep(800);
+//                    Log.e(LOG_TAG, "init sleep !");
+//                }catch (InterruptedException e){}
+//
+//                int nCount = 0;
+//                while(true){
+//                    try {
+//                        String checkRet = CheckCodeUtil.checkcode("","[{20160718HH0031Aimei860842024493912}]");
+////                        checkRet = null;
+////                        Log.e(LOG_TAG,checkRet);
+//                        Log.e(LOG_TAG,checkRet);
+//                        nCount = nCount + 1;
+//                        Log.e(LOG_TAG,"count:"+nCount);
+//                        Thread.sleep(200); //暂停，每一秒输出一次
+//                    }catch (InterruptedException e){}
+//                }
+//            }
+//        }).start();
+//        Log.e(LOG_TAG, "dex plug init end!");
 
         if (socket != null) {
             logger.info("Service is running...");
-            return super.onStartCommand(intent, flags, startId);
+            return;
         }
 
-//        Intent _intent = new Intent("com.fangbian.zt.SERVICE");
-//        boolean result = bindService(_intent, setDeviceInfoByPhone_Connection, Context.BIND_AUTO_CREATE);
-//        if (!result) {
-//            message = "Service Connect failed!";
-//            logger.error(message);
-//            invokeCallback(true, message);
-//        }
-
         logger.info("Service Starting...");
+
         try {
             socket = IO.socket("http://120.26.213.143:8000/terminal");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     logger.info("CONNECTED");
-//                    socket.emit("data", "hi server");
                 }
             }).on("d_checkcode", new Emitter.Listener() {
                 @Override
@@ -86,11 +92,10 @@ public class SocketClientService extends Service {
                     } catch (Exception ex) {
                         error = ex.getMessage();
                     }
-                    //socket.emit("d_checkcode",checkCode);
                     try {
                         socket.emit("checkcode",
-                                new ResultMessage<String>(String.valueOf(args[0]), checkCode, error,
-                                        System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
+                                new ResultMessage(String.valueOf(args[0]), checkCode, error,
+                                        System.currentTimeMillis(), ip).getJsonObject());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -108,11 +113,10 @@ public class SocketClientService extends Service {
                         logger.error(error);
                     }
 
-                    //socket.emit("e_checkcode",checkCode);
                     try {
                         socket.emit("checkcode",
-                                new ResultMessage<String>(String.valueOf(args[0]), checkCode, error,
-                                        System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
+                                new ResultMessage(String.valueOf(args[0]), checkCode, error,
+                                        System.currentTimeMillis(), ip).getJsonObject());
                     } catch (JSONException e) {
                         logger.error(e.getMessage());
                     }
@@ -129,12 +133,11 @@ public class SocketClientService extends Service {
                     localSuanyaPackageManager.setPackageInfo(localSuanyaPackageInfo);
                     tokenContext.setPackageManager(localSuanyaPackageManager);
                     tokenContext.setPackageName("com.MobileTicket");
-                    String realm="";
+                    String realm = "";
                     String error = "";
                     try {
                         realm = AppAuthenticityToken.a1(tokenContext, String.valueOf(args[1]));
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         error = e.getMessage();
                         logger.error(error);
                     }
@@ -142,7 +145,7 @@ public class SocketClientService extends Service {
                     try {
                         socket.emit("realm",
                                 new ResultMessage(String.valueOf(args[0]), realm, error,
-                                        System.currentTimeMillis(), getLocalIpAddress()).getJsonObject());
+                                        System.currentTimeMillis(), ip).getJsonObject());
                     } catch (JSONException e) {
                         logger.error(e.getMessage());
                     }
@@ -176,10 +179,10 @@ public class SocketClientService extends Service {
             logger.error(e.getMessage());
         }
 
-        return super.onStartCommand(intent, flags, startId);
+        return;
     }
 
-    public String getLocalIpAddress() {
+    public static String getLocalIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
@@ -194,32 +197,5 @@ public class SocketClientService extends Service {
             logger.error(ex.getMessage() == null ? "get local ip address faild" : ex.getMessage());
         }
         return "";
-    }
-
-    public boolean upgradeRootPermission(String pkgCodePath) {
-        Process process = null;
-        DataOutputStream os = null;
-        try {
-            String cmd = "chmod 777 " + pkgCodePath;
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
-            os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes(cmd + "\n");
-            os.writeBytes("exit\n");
-            os.flush();
-            process.waitFor();
-        } catch (Exception e) {
-            logger.error("请求root权限失败\n" + e.getMessage());
-            return false;
-        } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-                process.destroy();
-            } catch (Exception e) {
-                logger.error("请求root权限失败\n" + e.getMessage());
-            }
-        }
-        return true;
     }
 }

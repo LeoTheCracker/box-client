@@ -1,10 +1,9 @@
 package com.fangbian.box_client;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
+
+import com.hguiy.dexplug.MainActivity;
 
 /**
  * Created by zt on 16/7/27.
