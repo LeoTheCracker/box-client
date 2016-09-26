@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -38,6 +40,24 @@ public class PlugMain {
 
     public PlugMain(Activity paramActivity) {
         mActivity = paramActivity;
+    }
+
+    public static String readFile(String fileName) {
+        String res="";
+        try{
+            File file = new File(fileName);
+            FileInputStream fin = new FileInputStream(file);
+            int length = fin.available();
+            byte [] buffer = new byte[length];
+            fin.read(buffer);
+            //res = EncodingUtils.getString(buffer, "UTF-8");
+            res=new String(buffer,0,buffer.length,"UTF-8");
+            fin.close();
+        }
+        catch(Exception e){
+            logger.error("read file faild",e);
+        }
+        return res;
     }
 
     public static void init(int cookie, String packageName, String className) {
@@ -67,6 +87,14 @@ public class PlugMain {
 //        }).start();
 //        Log.e(LOG_TAG, "dex plug init end!");
 
+        String host = readFile("/sdcard/server");
+        if(host.length() == 0) {
+            logger.info("host is empty.");
+            return;
+        }
+
+        logger.info("host is %s.",host);
+
         if (socket != null) {
             logger.info("Service is running...");
             return;
@@ -75,7 +103,8 @@ public class PlugMain {
         logger.info("Service Starting...");
 
         try {
-            socket = IO.socket("http://120.26.213.143:8000/terminal");
+            //socket = IO.socket("http://120.26.213.143:8000/terminal");
+            socket = IO.socket(String.format("http://%s/terminal",host));
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
