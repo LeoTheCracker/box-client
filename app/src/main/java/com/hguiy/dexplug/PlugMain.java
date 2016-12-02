@@ -88,6 +88,7 @@ public class PlugMain {
 //        Log.e(LOG_TAG, "dex plug init end!");
 
         String host = readFile("/sdcard/server");
+        host = host.replace("\n","");
         if(host.length() == 0) {
             logger.info("host is empty.");
             return;
